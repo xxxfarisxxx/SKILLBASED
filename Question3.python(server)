@@ -1,0 +1,61 @@
+import random
+import socket
+import threading
+
+
+QUOTES = [
+    "If I know what love is, it is because of you..",
+    "Thinking of you keeps me awake. Dreaming of you keeps me asleep. Being with you keeps me alive.",
+    "Life is what happens when you're busy making other plans",
+    "If you want to live a happy life, tie it to a goal, not to people or things."
+    "Never let the fear of striking out keep you from playing the game."
+]
+
+
+def handle_client(client_socket):
+    global threadcount
+
+    quote = random.choice(QUOTES)
+    print("[*] Randomizing quotes")
+
+
+    client_socket.send(quote.encode())
+    print("[*] Random Quote sent")
+
+
+    client_socket.close()
+    threadcount -= 1
+    print("[*] Connection Closed")
+    print(f"[*] Active thread:{threadcount}\n")
+
+
+server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+print("[*] Socket created")
+
+
+port = 8888
+
+
+server_socket.bind(("0.0.0.0", port))
+print(f"[*] Socket bind to port:{port}")
+
+
+server_socket.listen(5)
+print("[*] Waiting...")
+
+
+threadcount = 0
+
+while True:
+
+    client_socket, client_address = server_socket.accept()
+    print(f"[*] Connection Accepted {client_address[0]}:{client_address[1]}")
+
+
+    client_thread = threading.Thread(target=handle_client, args=(client_socket,))
+    threadcount += 1
+
+
+    client_thread.start()
+    print(f"[*] Active thread:{threadcount}")
+
