@@ -44,7 +44,7 @@ int main() {
             printf("[*] Random number has been sent\n");
 
 
-            sprintf(buffer, "%d", random_number);
+            printf(buffer, "%d", random_number);
 
 
             write(new_sock, buffer, strlen(buffer));
