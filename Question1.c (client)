@@ -1,0 +1,32 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+
+int main() {
+
+    int sockfd;
+    char buffer[256];
+
+    struct sockaddr_in serv_addr = {AF_INET, htons(8000)};
+    inet_pton(AF_INET, "192.168.56.101", &serv_addr.sin_addr);
+
+
+    sockfd = socket(AF_INET, SOCK_STREAM, 0);
+
+
+    connect(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr));
+
+
+    read(sockfd, buffer, 255);
+
+
+    printf("Random number generator: %s\n", buffer);
+
+
+    close(sockfd);
+    return 0;
+}
